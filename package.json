@@ -1,0 +1,25 @@
+{
+  "name": "pie-client-side-controller",
+  "version": "1.0.0",
+  "description": "A controller that delegates pie calls down to individual pie controllers",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PieLabs/client-side-pie-controller.git"
+  },
+  "keywords": [
+    "pie"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PieLabs/client-side-pie-controller/issues"
+  },
+  "homepage": "https://github.com/PieLabs/client-side-pie-controller#readme",
+  "dependencies": {
+    "lodash": "~4.16.1"
+  }
+}
