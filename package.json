@@ -21,5 +21,12 @@
   "homepage": "https://github.com/PieLabs/client-side-pie-controller#readme",
   "dependencies": {
     "lodash": "~4.16.1"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
+    "sinon": "^1.17.6"
   }
 }
