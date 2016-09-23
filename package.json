@@ -4,7 +4,7 @@
   "description": "A controller that delegates pie calls down to individual pie controllers",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers js:babel-core/register test"
   },
   "repository": {
     "type": "git",
