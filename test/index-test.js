@@ -12,7 +12,7 @@ describe('pie-client-side-controller', () => {
   beforeEach((done) => {
     model = [{
       id: '1',
-      component: {
+      pie: {
         name: 'my-pie'
       }
       }];
