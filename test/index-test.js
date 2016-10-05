@@ -7,7 +7,7 @@ import Controller from '../lib/index';
 
 describe('pie-client-side-controller', () => {
 
-  let model, controllerMap, controller, myPieController;
+  let model, controllerMap, controller, myPieController, scoringProcessor;
 
   beforeEach((done) => {
     model = [{
@@ -15,7 +15,7 @@ describe('pie-client-side-controller', () => {
       pie: {
         name: 'my-pie'
       }
-      }];
+    }];
 
     myPieController = {
       outcome: sinon.spy((model) => {
@@ -34,6 +34,14 @@ describe('pie-client-side-controller', () => {
 
     controllerMap = {
       'my-pie': myPieController
+    }
+
+    scoringProcessor = {
+      score: sinon.spy(() => {
+        return {
+          value: 'scoring-processor-response'
+        };
+      })
     }
 
     controller = new Controller(model, controllerMap);
@@ -72,6 +80,31 @@ describe('pie-client-side-controller', () => {
         id: '1',
         value: 'outcome-response'
       }]);
+    });
+  });
+
+  describe('scoringProcessor', () => {
+    let scoringProcessorResults;
+
+    beforeEach((done) => {
+      controller = new Controller(model, controllerMap, scoringProcessor);
+      controller.outcome(['1'], [{
+        id: '1',
+        value: 'session'
+      }], {
+        mode: 'evaluate'
+      })
+      .then((results) => {
+        scoringProcessorResults = results;
+        done();
+      })
+      .catch(done);
+    });
+
+    it('should process the outcome', () => {
+      scoringProcessorResults.should.eql({
+        value: 'scoring-processor-response'
+      });
     });
   });
 
