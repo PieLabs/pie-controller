@@ -47,7 +47,7 @@ describe('pie-client-side-controller', () => {
     let outcomeResults;
 
     beforeEach((done) => {
-      controller.outcome(['1'], [{
+      controller.outcome([{
           id: '1',
           value: 'session'
         }], {
@@ -90,7 +90,7 @@ describe('pie-client-side-controller', () => {
     let modelResults;
 
     beforeEach((done) => {
-      controller.model(['1'], [{
+      controller.model([{
           id: '1',
           value: 'session'
       }], {
