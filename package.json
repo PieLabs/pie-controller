@@ -4,7 +4,7 @@
   "description": "A controller that delegates pie calls down to individual pie controllers",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --require babel-register test"
+    "test": "mocha --require babel-register-setup test"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/PieLabs/pie-controller#readme",
   "dependencies": {
-    "lodash": "~4.16.1"
+    "lodash": "~4.16.1",
+    "pie-scoring" : "PieLabs/pie-scoring"
   },
   "devDependencies": {
     "babel-core": "^6.14.0",
