@@ -10,18 +10,20 @@ describe('pie-client-side-controller', () => {
   let model, controllerMap, controller, myPieController, scoringProcessor;
 
   beforeEach((done) => {
-    model = [{
-      id: '1',
-      pie: {
-        name: 'my-pie'
-      }
-    }];
+    model = {
+      pies: [{
+        id: '1',
+        pie: {
+          name: 'my-pie'
+        }
+      }]
+    };
 
     myPieController = {
       outcome: sinon.spy((model) => {
         return Promise.resolve({
           id: model.id,
-          value: 'outcome-response'
+          score: {scaled: 1}
         });
       }),
       model: sinon.spy((model) => {
@@ -34,14 +36,6 @@ describe('pie-client-side-controller', () => {
 
     controllerMap = {
       'my-pie': myPieController
-    }
-
-    scoringProcessor = {
-      score: sinon.spy(() => {
-        return {
-          value: 'scoring-processor-response'
-        };
-      })
     }
 
     controller = new Controller(model, controllerMap);
@@ -67,7 +61,7 @@ describe('pie-client-side-controller', () => {
     });
 
     it('should delegate calls to the underlying controllers', () => {
-      sinon.assert.calledWith(myPieController.outcome, model[0], {
+      sinon.assert.calledWith(myPieController.outcome, model.pies[0], {
         id: '1',
         value: 'session'
       }, {
@@ -76,35 +70,18 @@ describe('pie-client-side-controller', () => {
     });
 
     it('should return the result in the promise', () => {
-      outcomeResults.should.eql([{
-        id: '1',
-        value: 'outcome-response'
-      }]);
-    });
-  });
-
-  describe('scoringProcessor', () => {
-    let scoringProcessorResults;
-
-    beforeEach((done) => {
-      controller = new Controller(model, controllerMap, scoringProcessor);
-      controller.outcome(['1'], [{
-        id: '1',
-        value: 'session'
-      }], {
-        mode: 'evaluate'
-      })
-      .then((results) => {
-        scoringProcessorResults = results;
-        done();
-      })
-      .catch(done);
-    });
-
-    it('should process the outcome', () => {
-      scoringProcessorResults.should.eql({
-        value: 'scoring-processor-response'
-      });
+      outcomeResults.should.eql({
+        summary: {
+          maxPoints: 1,
+          points: 1,
+          percentage: 100
+        },
+        components:[{
+          id: '1',
+          score: 1,
+          weight: 1,
+          weightedScore: 1
+        }]});
     });
   });
 
@@ -127,7 +104,7 @@ describe('pie-client-side-controller', () => {
     });
 
     it('should delegate calls to the underlying controllers', () => {
-      sinon.assert.calledWith(myPieController.model, model[0], {
+      sinon.assert.calledWith(myPieController.model, model.pies[0], {
         id: '1',
         value: 'session'
       }, {
