@@ -7,7 +7,7 @@ import Controller from '../lib/index';
 
 describe('pie-client-side-controller', () => {
 
-  let model, controllerMap, controller, myPieController, scoringProcessor;
+  let model, controllerMap, controller, myPieController;
 
   beforeEach((done) => {
     model = {
