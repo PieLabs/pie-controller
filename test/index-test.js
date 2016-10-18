@@ -11,15 +11,27 @@ describe('pie-client-side-controller', () => {
 
   beforeEach((done) => {
     model = {
-      pies: [{
-        id: '1',
-        pie: {
-          name: 'my-pie'
-        }
-      }]
+      pies: [
+        {
+          id: '1',
+          pie: {
+            name: 'my-pie',
+            langs: ['en']
+          }
+        },
+        {
+          id: '2',
+          pie: {
+            name: 'my-second-pie',
+            langs: ['es', 'en']
+          }
+        }]
     };
 
     myPieController = {
+      getLanguages: () => {
+        return ['en']
+      },
       outcome: sinon.spy((model) => {
         return Promise.resolve({
           id: model.id,
@@ -35,11 +47,61 @@ describe('pie-client-side-controller', () => {
     }
 
     controllerMap = {
-      'my-pie': myPieController
+      'my-pie': myPieController,
+      'my-second-pie': myPieController
     }
 
     controller = new Controller(model, controllerMap);
     done();
+  });
+
+  describe('getLanguages', () => {
+    let langs;
+    beforeEach(() => {
+      langs = controller.getLanguages();
+    });
+
+    it('should return the intersection of the supported languages', function() {
+      langs.should.eql(['en']);
+    });
+  });
+
+  describe('getLanguages with no langs in model', () => {
+    beforeEach(() => {
+      model = {
+        pies: [
+          {
+            id: '1',
+            pie: {
+              name: 'my-pie'
+            }
+          }]
+      };
+
+      controllerMap = {
+        'my-pie': myPieController
+      };
+
+      controller = new Controller(model, controllerMap);
+    });
+
+    it('should return [] when langs is []', function() {
+      model.pies[0].pie.langs = [];
+      let langs = controller.getLanguages();
+      langs.should.eql([]);
+    });
+
+    it('should return [] when langs is undefined', function() {
+      model.pies[0].pie.langs = undefined;
+      let langs = controller.getLanguages();
+      langs.should.eql([]);
+    });
+
+    it('should return [] when langs is null', function() {
+      model.pies[0].pie.langs = null;
+      let langs = controller.getLanguages();
+      langs.should.eql([]);
+    });
   });
 
   describe('outcome', () => {
@@ -48,11 +110,11 @@ describe('pie-client-side-controller', () => {
 
     beforeEach((done) => {
       controller.outcome([{
-          id: '1',
-          value: 'session'
-        }], {
-          mode: 'gather'
-        })
+        id: '1',
+        value: 'session'
+      }], {
+        mode: 'gather'
+      })
         .then((results) => {
           outcomeResults = results;
           done();
@@ -72,16 +134,22 @@ describe('pie-client-side-controller', () => {
     it('should return the result in the promise', () => {
       outcomeResults.should.eql({
         summary: {
-          maxPoints: 1,
-          points: 1,
+          maxPoints: 2,
+          points: 2,
           percentage: 100
         },
-        components:[{
+        components: [{
           id: '1',
           score: 1,
           weight: 1,
           weightedScore: 1
-        }]});
+        }, {
+          id: '2',
+          score: 1,
+          weight: 1,
+          weightedScore: 1
+        }]
+      });
     });
   });
 
@@ -91,11 +159,11 @@ describe('pie-client-side-controller', () => {
 
     beforeEach((done) => {
       controller.model([{
-          id: '1',
-          value: 'session'
+        id: '1',
+        value: 'session'
       }], {
-          mode: 'gather'
-        })
+        mode: 'gather'
+      })
         .then((results) => {
           modelResults = results;
           done();
@@ -115,6 +183,9 @@ describe('pie-client-side-controller', () => {
     it('should return the result in the promise', () => {
       modelResults.should.eql([{
         id: '1',
+        value: 'model-response'
+      }, {
+        id: '2',
         value: 'model-response'
       }]);
     });
