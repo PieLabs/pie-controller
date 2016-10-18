@@ -66,6 +66,44 @@ describe('pie-client-side-controller', () => {
     });
   });
 
+  describe('getLanguages with no langs in model', () => {
+    beforeEach(() => {
+      model = {
+        pies: [
+          {
+            id: '1',
+            pie: {
+              name: 'my-pie'
+            }
+          }]
+      };
+
+      controllerMap = {
+        'my-pie': myPieController
+      };
+
+      controller = new Controller(model, controllerMap);
+    });
+
+    it('should return [] when langs is []', function() {
+      model.pies[0].pie.langs = [];
+      let langs = controller.getLanguages();
+      langs.should.eql([]);
+    });
+
+    it('should return [] when langs is undefined', function() {
+      model.pies[0].pie.langs = undefined;
+      let langs = controller.getLanguages();
+      langs.should.eql([]);
+    });
+
+    it('should return [] when langs is null', function() {
+      model.pies[0].pie.langs = null;
+      let langs = controller.getLanguages();
+      langs.should.eql([]);
+    });
+  });
+
   describe('outcome', () => {
 
     let outcomeResults;
