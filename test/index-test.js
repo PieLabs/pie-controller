@@ -57,8 +57,11 @@ describe('pie-client-side-controller', () => {
 
   describe('getLanguages', () => {
     let langs;
-    beforeEach(() => {
-      langs = controller.getLanguages();
+    beforeEach((done) => {
+      controller.getLanguages().then((l) => {
+        langs = l;
+        done();
+      });
     });
 
     it('should return the intersection of the supported languages', function() {
@@ -85,22 +88,28 @@ describe('pie-client-side-controller', () => {
       controller = new Controller(model, controllerMap);
     });
 
-    it('should return [] when langs is []', function() {
+    it('should return [] when langs is []', function(done) {
       model.pies[0].pie.langs = [];
-      let langs = controller.getLanguages();
-      langs.should.eql([]);
+      controller.getLanguages().then((l) => {
+        l.should.eql([]);
+        done();
+      });
     });
 
-    it('should return [] when langs is undefined', function() {
+    it('should return [] when langs is undefined', function(done) {
       model.pies[0].pie.langs = undefined;
-      let langs = controller.getLanguages();
-      langs.should.eql([]);
+      controller.getLanguages().then((l) => {
+        l.should.eql([]);
+        done();
+      });
     });
 
-    it('should return [] when langs is null', function() {
+    it('should return [] when langs is null', function(done) {
       model.pies[0].pie.langs = null;
-      let langs = controller.getLanguages();
-      langs.should.eql([]);
+      controller.getLanguages().then((l) => {
+        l.should.eql([]);
+        done();
+      });
     });
   });
 
