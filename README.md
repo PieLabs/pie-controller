@@ -37,5 +37,5 @@ This package exports an `es6` module, if you want to use it in the browser you'l
 ## Test
 
 ```shell
-mocha --require babel-register test
+npm test 
 ```

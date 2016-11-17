@@ -1,6 +1,6 @@
 {
   "name": "pie-controller",
-  "version": "1.1.0",
+  "version": "1.1.1-prerelease",
   "description": "A controller that delegates pie calls down to individual pie controllers",
   "keywords": [
     "pie"
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/PieLabs/pie-controller.git"
   },
   "author": "",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/PieLabs/pie-controller/issues"
   },
