@@ -1,8 +1,10 @@
 {
   "name": "pie-controller",
-  "version": "1.1.0-prerelease",
+  "version": "1.1.0",
   "description": "A controller that delegates pie calls down to individual pie controllers",
-  "keywords" : ["pie"],
+  "keywords": [
+    "pie"
+  ],
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha --require babel-register-setup test"
@@ -11,9 +13,6 @@
     "type": "git",
     "url": "git+https://github.com/PieLabs/pie-controller.git"
   },
-  "keywords": [
-    "pie"
-  ],
   "author": "",
   "license": "MIT",
   "bugs": {
