@@ -21,14 +21,16 @@
   "homepage": "https://github.com/PieLabs/pie-controller#readme",
   "dependencies": {
     "lodash": "~4.16.1",
-    "pie-scoring" : "PieLabs/pie-scoring"
+    "pie-scoring": "PieLabs/pie-scoring"
   },
   "devDependencies": {
     "babel-core": "^6.14.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.11.1",
     "chai": "^3.5.0",
+    "gulp": "^3.9.1",
     "mocha": "^3.0.2",
+    "release-helper": "github:pielabs/release-helper",
     "sinon": "^1.17.6"
   }
 }
