@@ -1,6 +1,6 @@
 {
   "name": "pie-controller",
-  "version": "1.2.0-prerelease",
+  "version": "2.0.0-prerelease",
   "description": "A controller that delegates pie calls down to individual pie controllers",
   "keywords": [
     "pie"
@@ -30,6 +30,7 @@
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "mocha": "^3.0.2",
+    "proxyquire": "^1.7.10",
     "release-helper": "github:pielabs/release-helper",
     "sinon": "^1.17.6"
   }
