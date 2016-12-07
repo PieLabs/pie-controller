@@ -7,7 +7,7 @@ It calls the underlying element-specific controller based on the `id` and `pie.n
 ## usage
 
 
-```javascript`
+```javascript
   
   import PieController from 'pie-controller';
   
@@ -15,7 +15,16 @@ It calls the underlying element-specific controller based on the `id` and `pie.n
     'pie-element' : pieElementController
   };
 
-  var model = [{id: '1', pie: {name: 'pie-element', version: '0.0.1'}];
+  var model = {
+    pies: [
+      { 
+        id: '1', 
+        element: 'pie-element'
+      }
+    ],
+    langs: ['en-US'],
+    weights: [{id: '1', weight: '1'}]
+  }
 
   var controller = new PieController(model, controllerMap);
 	
