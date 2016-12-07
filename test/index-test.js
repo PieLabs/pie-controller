@@ -1,44 +1,56 @@
 import chai from 'chai';
 chai.should();
 
-import sinon from 'sinon';
+import { assert, stub, spy } from 'sinon';
+import proxyquire from 'proxyquire';
 
-import Controller from '../lib/index';
 
 describe('pie-client-side-controller', () => {
 
-  let model, controllerMap, controller, myPieController;
+  let model, controllerMap, controller, myPieController, Controller, factory, processor;
 
   beforeEach((done) => {
+
+    processor = {
+      score: spy(function (session, outcomes) {
+        return {
+          session: session,
+          outcomes: outcomes
+        }
+      })
+    }
+
+    factory = {
+      getProcessor: stub().returns(processor)
+    }
+
+    Controller = proxyquire('../lib/index', {
+      'pie-scoring': {
+        default: stub().returns(factory)
+      }
+    }).default;
+
     model = {
+      langs: ['en-US'],
       pies: [
         {
           id: '1',
-          pie: {
-            name: 'my-pie',
-            langs: ['en']
-          }
+          element: 'my-pie',
         },
         {
           id: '2',
-          pie: {
-            name: 'my-second-pie',
-            langs: ['es', 'en']
-          }
+          element: 'my-second-pie',
         }]
     };
 
     myPieController = {
-      getLanguages: () => {
-        return ['en']
-      },
-      outcome: sinon.spy((model) => {
+      outcome: spy((model) => {
         return Promise.resolve({
           id: model.id,
-          score: {scaled: 1}
+          score: { scaled: 1 }
         });
       }),
-      model: sinon.spy((model) => {
+      model: spy((model) => {
         return Promise.resolve({
           id: model.id,
           value: 'model-response'
@@ -64,8 +76,8 @@ describe('pie-client-side-controller', () => {
       });
     });
 
-    it('should return the intersection of the supported languages', function() {
-      langs.should.eql(['en']);
+    it('should return the intersection of the supported languages', function () {
+      langs.should.eql(model.langs);
     });
   });
 
@@ -88,24 +100,7 @@ describe('pie-client-side-controller', () => {
       controller = new Controller(model, controllerMap);
     });
 
-    it('should return [] when langs is []', function(done) {
-      model.pies[0].pie.langs = [];
-      controller.getLanguages().then((l) => {
-        l.should.eql([]);
-        done();
-      });
-    });
-
-    it('should return [] when langs is undefined', function(done) {
-      model.pies[0].pie.langs = undefined;
-      controller.getLanguages().then((l) => {
-        l.should.eql([]);
-        done();
-      });
-    });
-
-    it('should return [] when langs is null', function(done) {
-      model.pies[0].pie.langs = null;
+    it('should return [] when langs is []', function (done) {
       controller.getLanguages().then((l) => {
         l.should.eql([]);
         done();
@@ -122,8 +117,8 @@ describe('pie-client-side-controller', () => {
         id: '1',
         value: 'session'
       }], {
-        mode: 'gather'
-      })
+          mode: 'gather'
+        })
         .then((results) => {
           outcomeResults = results;
           done();
@@ -132,32 +127,34 @@ describe('pie-client-side-controller', () => {
     });
 
     it('should delegate calls to the underlying controllers', () => {
-      sinon.assert.calledWith(myPieController.outcome, model.pies[0], {
+      assert.calledWith(myPieController.outcome, model.pies[0], {
         id: '1',
         value: 'session'
       }, {
-        mode: 'gather'
-      });
+          mode: 'gather'
+        });
     });
 
     it('should return the result in the promise', () => {
       outcomeResults.should.eql({
-        summary: {
-          maxPoints: 2,
-          points: 2,
-          percentage: 100
-        },
-        components: [{
+        session: [{
           id: '1',
-          score: 1,
-          weight: 1,
-          weightedScore: 1
-        }, {
-          id: '2',
-          score: 1,
-          weight: 1,
-          weightedScore: 1
-        }]
+          value: 'session'
+        }],
+        outcomes: [
+          {
+            id: '1',
+            score: {
+              scaled: 1
+            }
+          },
+          {
+            id: '2',
+            score: {
+              scaled: 1
+            }
+          }
+        ]
       });
     });
   });
@@ -171,8 +168,8 @@ describe('pie-client-side-controller', () => {
         id: '1',
         value: 'session'
       }], {
-        mode: 'gather'
-      })
+          mode: 'gather'
+        })
         .then((results) => {
           modelResults = results;
           done();
@@ -181,12 +178,12 @@ describe('pie-client-side-controller', () => {
     });
 
     it('should delegate calls to the underlying controllers', () => {
-      sinon.assert.calledWith(myPieController.model, model.pies[0], {
+      assert.calledWith(myPieController.model, model.pies[0], {
         id: '1',
         value: 'session'
       }, {
-        mode: 'gather'
-      });
+          mode: 'gather'
+        });
     });
 
     it('should return the result in the promise', () => {
