@@ -1,38 +1,35 @@
-import chai from 'chai';
-chai.should();
+import { assert, spy, stub } from 'sinon';
 
-import { assert, stub, spy } from 'sinon';
+import chai from 'chai';
 import proxyquire from 'proxyquire';
 
+chai.should();
 
 describe('pie-client-side-controller', () => {
 
-  let model, controllerMap, controller, myPieController, Controller, factory, processor;
+  let model, controllerMap, controller, myPieController, Controller, outcomeResult;
 
   beforeEach((done) => {
 
-    processor = {
-      score: spy(function (session, outcomes) {
-        return {
-          session: session,
-          outcomes: outcomes
-        }
-      })
-    }
-
-    factory = {
-      getProcessor: stub().returns(processor)
-    }
+    outcomeResult = {
+      summary: { max: 1, min: 0, score: 1, percentage: 100 },
+      pies: [
+        { id: '1', score: 1.0 }
+      ],
+      weights: [
+        { id: '1', weight: 1 }
+      ]
+    };
 
     Controller = proxyquire('../lib/index', {
-      'pie-scoring': {
-        default: stub().returns(factory)
+      './scoring': {
+        default: stub().returns(Promise.resolve(outcomeResult))
       }
     }).default;
 
     model = {
       langs: ['en-US'],
-      pies: [
+      models: [
         {
           id: '1',
           element: 'my-pie',
@@ -47,7 +44,7 @@ describe('pie-client-side-controller', () => {
       outcome: spy((model) => {
         return Promise.resolve({
           id: model.id,
-          score: { scaled: 1 }
+          score: 1
         });
       }),
       model: spy((model) => {
@@ -84,7 +81,7 @@ describe('pie-client-side-controller', () => {
   describe('getLanguages with no langs in model', () => {
     beforeEach(() => {
       model = {
-        pies: [
+        models: [
           {
             id: '1',
             pie: {
@@ -127,7 +124,7 @@ describe('pie-client-side-controller', () => {
     });
 
     it('should delegate calls to the underlying controllers', () => {
-      assert.calledWith(myPieController.outcome, model.pies[0], {
+      assert.calledWith(myPieController.outcome, model.models[0], {
         id: '1',
         value: 'session'
       }, {
@@ -136,26 +133,7 @@ describe('pie-client-side-controller', () => {
     });
 
     it('should return the result in the promise', () => {
-      outcomeResults.should.eql({
-        session: [{
-          id: '1',
-          value: 'session'
-        }],
-        outcomes: [
-          {
-            id: '1',
-            score: {
-              scaled: 1
-            }
-          },
-          {
-            id: '2',
-            score: {
-              scaled: 1
-            }
-          }
-        ]
-      });
+      outcomeResults.should.eql(outcomeResult)
     });
   });
 
@@ -178,7 +156,7 @@ describe('pie-client-side-controller', () => {
     });
 
     it('should delegate calls to the underlying controllers', () => {
-      assert.calledWith(myPieController.model, model.pies[0], {
+      assert.calledWith(myPieController.model, model.models[0], {
         id: '1',
         value: 'session'
       }, {
