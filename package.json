@@ -1,6 +1,6 @@
 {
   "name": "pie-controller",
-  "version": "3.2.0-prerelease",
+  "version": "3.2.0",
   "description": "A controller that delegates pie calls down to individual pie controllers",
   "keywords": [
     "pie"
