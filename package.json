@@ -1,13 +1,14 @@
 {
   "name": "pie-controller",
-  "version": "2.0.0",
+  "version": "3.0.0-prerelease",
   "description": "A controller that delegates pie calls down to individual pie controllers",
   "keywords": [
     "pie"
   ],
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --require babel-register-setup test"
+    "test": "mocha --require babel-register-setup test",
+    "release": "./node_modules/.bin/gulp release"
   },
   "repository": {
     "type": "git",
@@ -20,8 +21,7 @@
   },
   "homepage": "https://github.com/PieLabs/pie-controller#readme",
   "dependencies": {
-    "lodash": "~4.17.2",
-    "pie-scoring": "PieLabs/pie-scoring"
+    "lodash": "~4.17.2"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
