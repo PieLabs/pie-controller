@@ -167,9 +167,11 @@ describe('pie-client-side-controller', () => {
     it('should return the result in the promise', () => {
       modelResults.should.eql([{
         id: '1',
+        element: 'my-pie',
         value: 'model-response'
       }, {
         id: '2',
+        element: 'my-second-pie',
         value: 'model-response'
       }]);
     });
